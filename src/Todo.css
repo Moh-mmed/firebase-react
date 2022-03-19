@@ -1,0 +1,35 @@
+.Todo {
+  background: #b6b3c9;
+  border-radius: 7px;
+  padding: 8px 10px;
+  margin: 10px 0;
+}
+.Todo-text {
+  display: inline-block;
+  width: 85%;
+  font-size: 1.2em;
+}
+.Todo > i {
+  margin: 0 4px;
+  font-size: 1.1em;
+  color: #f5dbf0;
+  cursor: pointer;
+}
+
+.Todo-edit-form input[type="text"],
+.Todo-edit-form button {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.Todo-edit-form input[type="text"] {
+  width: 75%;
+  outline: none;
+}
+
+.Todo-edit-form button {
+  background-color: #35e4a1;
+  cursor: pointer;
+}
