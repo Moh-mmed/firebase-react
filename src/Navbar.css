@@ -1,0 +1,43 @@
+body {
+  font-family: sans-serif;
+}
+nav {
+  width: 100%;
+  padding: 0 4rem;
+  background: #222;
+}
+ul {
+  list-style-type: none;
+}
+a,
+a:hover {
+  color: white;
+  text-decoration: none;
+}
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.menu li {
+  color: white;
+  font-size: 16px;
+  padding: 15px 5px;
+  padding: 15px 10px;
+}
+li.logo {
+  font-size: 1.5rem;
+  color: white;
+}
+.button span {
+  padding: 0.6em 1.5em;
+  background: #3e4684;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.button span:hover {
+  background: #3d468f;
+  transition: all 0.25s;
+}

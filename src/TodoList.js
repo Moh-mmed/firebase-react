@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import db from './firebase-config';
+import {db} from './firebase-config';
 import { collection, getDocs, addDoc, doc, updateDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import NewTodoForm from './NewTodoForm'
 import Todo from './Todo'
