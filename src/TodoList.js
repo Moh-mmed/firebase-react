@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import db from './firebase-config';
-import { collection, getDocs,serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import NewTodoForm from './NewTodoForm'
 import Todo from './Todo'
 import './TodoList.css'
 
 const TodoList = (props) => {
-  const [todos, setTodos] = useState();
+  const [todos, setTodos] = useState([]);
+
+  // Collection reference
   const todosCollRef = collection(db, "todos");
+
   useEffect(() => {
     const getTodos = async () => {
       const data = await getDocs(todosCollRef);
@@ -17,13 +20,17 @@ const TodoList = (props) => {
     getTodos();
   }, []);
 
-  const add = (todo)=>{
-    let { task } = todo;
+  // add new todo
+  const add = (task) => {
     let newTodo = { task: task, createdAt: serverTimestamp() };
-    let updatedTodos = [...todos, newTodo]
+    let updatedTodos = [...todos, newTodo];
     setTodos([...updatedTodos]);
-  }
-  const update = (id, updatedTask)=> {
+    addDoc(todosCollRef, newTodo);
+  };
+
+  // Update todo
+  const update = (id, updatedTask) => {
+    const docRef = doc(db, "todos", id);
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
         return { ...todo, task: updatedTask };
@@ -31,12 +38,22 @@ const TodoList = (props) => {
       return todo;
     });
     setTodos([...updatedTodos]);
-  }
-  const remove = (id)=> {
+    
+    updateDoc(docRef, {
+      task: updatedTask,
+      createdAt: serverTimestamp(),
+    });
+  };
+
+  // Remove todo
+  const remove = (id) => {
+    const docRef = doc(db, "todos", id);
     const updatedTodos = todos.filter((todo) => todo.id !== id);
 
     setTodos([...updatedTodos]);
-  }
+    deleteDoc(docRef)
+  };
+
   const makeTodos = () => {
     return todos.map((todo) => {
       return (

@@ -1,43 +1,36 @@
-import React, { Component } from 'react'
+import {useState } from 'react'
 import './NewTodoForm.css'
-class NewTodoForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {task: ""}
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this);
+
+const NewTodoForm = ({addTodo}) => {
+  const [task, setTask] = useState("")
+
+  const handleChange= (evt)=> {
+    setTask(evt.target.value)
     }
-    handleChange(evt) {
-        this.setState({
-            [evt.target.name]: evt.target.value
-        })
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    addTodo(task);
+    setTask("");
     }
-    handleSubmit(evt) {
-        evt.preventDefault();
-        this.props.addTodo(this.state);
-        this.setState({
-          task: "",
-        });
-    }
-    render() {
-        return (
-          <div className="NewTodoForm">
-            <form onSubmit={this.handleSubmit}>
-              <label htmlFor="todo">New Todo</label>
-              <div className="inputs">
-                <input
-                  type="text"
-                  name="task"
-                  value={this.state.task}
-                  autoComplete="off"
-                  onChange={this.handleChange}
-                />
-                <button className="submit">Add Todo</button>
-              </div>
-            </form>
+ 
+    return (
+      <div className="NewTodoForm">
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="todo">New Todo</label>
+          <div className="inputs">
+            <input
+              type="text"
+              name="task"
+              value={task}
+              autoComplete="off"
+              onChange={handleChange}
+            />
+            <button className="submit">Add Todo</button>
           </div>
-        );
-    }
+        </form>
+      </div>
+    );
+    
 }
 
 export default NewTodoForm
