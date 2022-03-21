@@ -39,6 +39,7 @@ const TodoList = ({ user }) => {
   const add = (task) => {
     let newTodo = {
       task: task,
+      checked: false,
       createdAt: serverTimestamp(),
       userId: user.uid,
     };
@@ -73,6 +74,22 @@ const TodoList = ({ user }) => {
     deleteDoc(docRef)
   };
 
+  // todo check 
+  const check = (id) => {
+    const docRef = doc(db, "todos", id);
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        updateDoc(docRef, {
+          checked: !todo.checked,
+          createdAt: serverTimestamp(),
+        });
+        return { ...todo, checked: !todo.checked };
+      } 
+      return todo;
+    });
+    setTodos([...updatedTodos]);
+  }
+
   const makeTodos = () => {
     return todos && todos.map((todo) => {
       return (
@@ -80,8 +97,10 @@ const TodoList = ({ user }) => {
           key={todo.id}
           id={todo.id}
           task={todo.task}
+          checked={todo.checked}
           removeTodo={remove}
           updateTodo={update}
+          checkTodo={check}
         />
       );
     });

@@ -3,6 +3,15 @@
   border-radius: 7px;
   padding: 8px 10px;
   margin: 10px 0;
+  cursor: pointer;
+}
+.Todo.checked {
+  background-color: #fb9393b3;
+}
+.Todo.checked .Todo-text {
+  text-decoration: line-through;
+  font-style: italic;
+  color: #8c8c8c;
 }
 .Todo-text {
   display: inline-block;

@@ -2,7 +2,7 @@ import {useState } from 'react'
 import './Todo.css'
 
 const Todo = (props) => {
-  const { id, task, removeTodo, updateTodo } = props
+  const { id, task, removeTodo, updateTodo, checked ,checkTodo } = props
   const [updatedTask, setUpdatedTask] = useState(task)
   const [isEditing, setIsEditing] = useState(false)
 
@@ -23,6 +23,10 @@ const Todo = (props) => {
     setUpdatedTask(evt.target.value);
   };
 
+  const handleCheckTodo = () => {
+     console.log(checked)
+     checkTodo(id);
+   };
   let result;
   if (isEditing) {
       result = (
@@ -40,7 +44,7 @@ const Todo = (props) => {
       );
   } else {
         result = (
-          <div className="Todo">
+          <div className={`Todo ${checked?'checked':''}`} onClick={handleCheckTodo} key={id}>
             <span className="Todo-text">{updatedTask}</span>
             <i
               className="fas fa-pen"
