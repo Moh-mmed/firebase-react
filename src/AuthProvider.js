@@ -11,7 +11,7 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             setCurrentUser(user)
-            setUsername(user.displayName)
+            !!user && setUsername(user.displayName);
             setPending(false)
         })
     }, [])
