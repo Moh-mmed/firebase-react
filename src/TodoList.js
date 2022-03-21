@@ -29,7 +29,6 @@ const TodoList = ({ user }) => {
       snapshot.docs.forEach((todo) => {
         todos.push({ ...todo.data(), id: todo.id });
       });
-      console.log(todos);
       setTodos(todos);
     });
 

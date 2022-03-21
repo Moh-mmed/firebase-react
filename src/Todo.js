@@ -24,7 +24,6 @@ const Todo = (props) => {
   };
 
   const handleCheckTodo = () => {
-     console.log(checked)
      checkTodo(id);
    };
   let result;
