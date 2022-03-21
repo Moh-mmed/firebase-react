@@ -1,28 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import {db} from './firebase-config';
-import { collection, getDocs, addDoc, doc, updateDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  deleteDoc,
+  onSnapshot,
+  orderBy,
+  query,
+  where
+} from "firebase/firestore";
 import NewTodoForm from './NewTodoForm'
 import Todo from './Todo'
 import './TodoList.css'
 
-const TodoList = (props) => {
+const TodoList = ({ user }) => {
   const [todos, setTodos] = useState([]);
-
   // Collection reference
   const todosCollRef = collection(db, "todos");
 
+  // Query
+  const q = query(todosCollRef,where('userId',"==",user.uid), orderBy("createdAt"));
   useEffect(() => {
-    const getTodos = async () => {
-      const data = await getDocs(todosCollRef);
-      const todos = data.docs.map((todo) => ({ ...todo.data(), id: todo.id }));
+    onSnapshot(q, (snapshot) => {
+      let todos = [];
+      snapshot.docs.forEach((todo) => {
+        todos.push({ ...todo.data(), id: todo.id });
+      });
+      console.log(todos);
       setTodos(todos);
-    };
-    getTodos();
+    });
+
   }, []);
 
   // add new todo
   const add = (task) => {
-    let newTodo = { task: task, createdAt: serverTimestamp() };
+    let newTodo = {
+      task: task,
+      createdAt: serverTimestamp(),
+      userId: user.uid,
+    };
     let updatedTodos = [...todos, newTodo];
     setTodos([...updatedTodos]);
     addDoc(todosCollRef, newTodo);
@@ -55,7 +74,7 @@ const TodoList = (props) => {
   };
 
   const makeTodos = () => {
-    return todos.map((todo) => {
+    return todos && todos.map((todo) => {
       return (
         <Todo
           key={todo.id}

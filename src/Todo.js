@@ -26,7 +26,7 @@ const Todo = (props) => {
   let result;
   if (isEditing) {
       result = (
-        <div className="Todo">
+        <div className="Todo" key={id}>
           <form className="Todo-edit-form" onSubmit={handleUpdate}>
             <input
               type="text"

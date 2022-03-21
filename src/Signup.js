@@ -1,27 +1,31 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import {useNavigate, NavLink} from 'react-router-dom'
 import { auth } from "./firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import {useNavigate} from 'react-router-dom'
-import './Signup.css'
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import './Form.css'
+import { AuthContext } from "./AuthProvider";
 
 const Signup = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const { setUsername } = useContext(AuthContext);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+ const [error, setError] = useState({ state: false, errMessage: "" });
+
   const navigate = useNavigate()
      const formSubmit = (e) => {
        e.preventDefault();
        createUserWithEmailAndPassword(auth, email, password)
          .then((cred) => {
-           setIsAuthenticated(true);
+           updateProfile(cred.user, { displayName: name })
+           setUsername(name)
+           setName("");
            setEmail("");
-           setPassword("");
-           navigate("/", {replace: true})
+           setPassword(""); 
+           navigate("/", { replace: true })
          })
          .catch((err) => {
-           console.log(err.message);
+            setError({state: true, errMessage: "please verify you email and password"})
          });
      };
   return (
@@ -37,31 +41,20 @@ const Signup = () => {
         Sign up
       </h1>
       <form className="screen-1" onSubmit={formSubmit}>
+        <span className={`error ${error.state ? "show" : ""}`}>
+          {error.errMessage}
+        </span>
         <div className="field">
-          <label htmlFor="first-name">First Name</label>
+          <label htmlFor="name">First Name</label>
           <div className="sec-2">
             <input
               type="text"
-              name="first-name"
-              value={firstName}
-              placeholder="first name"
+              name="name"
+              value={name}
+              placeholder="name"
+              required
               onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div className="field">
-          <label htmlFor="last-name">Last Name</label>
-          <div className="sec-2">
-            <ion-icon name="lock-closed-outline"></ion-icon>
-            <input
-              type="text"
-              name="last-name"
-              value={lastName}
-              placeholder="last name"
-              onChange={(e) => {
-                setLastName(e.target.value);
+                setName(e.target.value);
               }}
             />
           </div>
@@ -69,12 +62,12 @@ const Signup = () => {
         <div className="field">
           <label htmlFor="email">Email Address</label>
           <div className="sec-2">
-            <ion-icon name="mail-outline"></ion-icon>
             <input
               type="email"
               name="email"
               placeholder="name@example.com"
               value={email}
+              required
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -84,12 +77,12 @@ const Signup = () => {
         <div className="field">
           <label htmlFor="password">Password</label>
           <div className="sec-2">
-            <ion-icon name="lock-closed-outline"></ion-icon>
             <input
               type="password"
               name="password"
               value={password}
               placeholder="password"
+              required
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
@@ -97,6 +90,12 @@ const Signup = () => {
           </div>
         </div>
         <button className="login">Sign up </button>
+        <div className="footer">
+          <span>
+            Already have an account?
+            <NavLink to="/">Log in</NavLink>
+          </span>
+        </div>
       </form>
     </div>
   );

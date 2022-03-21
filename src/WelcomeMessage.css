@@ -1,0 +1,7 @@
+.welcome-msg {
+  display: block;
+  width: 100%;
+  padding: 1rem 4rem;
+  font-weight: bolder;
+  font-size: 1.8rem;
+}

@@ -1,23 +1,25 @@
-import { useState } from "react";
-import "./Login.css";
+import { useState, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { auth } from "./firebase-config";
 import {signInWithEmailAndPassword,} from "firebase/auth";
-import { NavLink } from "react-router-dom";
-const Login = ({authStatus}) => {
+import { AuthContext } from "./AuthProvider";
+import "./Form.css";
+const Login = () => {
+   const { setUsername } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState({state: false, errMessage:""});
 
   const formSubmit = (e) => {
    e.preventDefault();
       signInWithEmailAndPassword(auth, email, password)
         .then((cred) => {
-          console.log("user logged in:", cred.user);
-          authStatus(true);
+           setUsername(cred.user.displayName);
           setEmail("");
           setPassword("");
         })
-        .catch((err) => {
-          console.log(err.message);
+        .catch(() => {
+          setError({state: true, errMessage: "please verify you email and password"})
         });
   }
 
@@ -34,7 +36,10 @@ const Login = ({authStatus}) => {
         Log in
       </h1>
       <form className="screen-1" onSubmit={formSubmit}>
-        <div className="email">
+        <span className={`error ${error.state ? "show" : ""}`}>
+          {error.errMessage}
+        </span>
+        <div className="field">
           <label htmlFor="email">Email Address</label>
           <div className="sec-2">
             <ion-icon name="mail-outline"></ion-icon>
@@ -49,7 +54,7 @@ const Login = ({authStatus}) => {
             />
           </div>
         </div>
-        <div className="password">
+        <div className="field">
           <label htmlFor="password">Password</label>
           <div className="sec-2">
             <ion-icon name="lock-closed-outline"></ion-icon>

@@ -9,7 +9,7 @@ const NewTodoForm = ({addTodo}) => {
     }
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    addTodo(task);
+    task !== "" && addTodo(task);
     setTask("");
     }
  
